@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private InputManager inputManager;
 
+    float horizontalInput;
+    float verticalInput;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -18,16 +21,13 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        inputManager = InputManager.GetInput();
+        InputManager inputManager = InputManager.GetInput();
+        horizontalInput = inputManager.HorizontalInput;
+        verticalInput = inputManager.VerticalInput;
     }
 
     private void FixedUpdate()
     {
-        float horizontalInput = inputManager.HorizontalInput;
-        float verticalInput = inputManager.VerticalInput;
-
-        Debug.Log(horizontalInput);
-
         Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput);
         rb.MovePosition(rb.position + movement * walkSpeed * Time.fixedDeltaTime);
     }

@@ -32,15 +32,15 @@ namespace MoonLib.PlayerInput
         {
             float horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
-
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
 
             Dictionary<InputAction, bool> actions = new Dictionary<InputAction, bool>();
-            actions[InputAction.Jump] = Input.GetButtonDown("Jump");
-            actions[InputAction.Crouch] = Input.GetButtonDown("Crouch");
-            actions[InputAction.Run] = Input.GetButton("Run");
-            actions[InputAction.Shoot] = Input.GetButtonDown("Shoot");
+            //actions[InputAction.Jump] = Input.GetButtonDown("Jump");
+            //actions[InputAction.Crouch] = Input.GetButtonDown("Crouch");
+            //actions[InputAction.Prone] = Input.GetButtonDown("Prone");
+            //actions[InputAction.Run] = Input.GetButton("Run");
+            //actions[InputAction.Shoot] = Input.GetButtonDown("Shoot");
 
             return new InputManager(horizontalInput, verticalInput, mouseX, mouseY, actions);
         }
@@ -50,6 +50,7 @@ namespace MoonLib.PlayerInput
     {
         Jump,
         Crouch,
+        Prone,
         Run,
         Shoot
     }
