@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isMoving = false;
     [SerializeField] private bool isSprinting = false;
     [SerializeField] private bool isJumping = false;
+    [SerializeField] private bool isGrounded = true;
     [SerializeField] private bool isCrouching = false;
     public PlayerState currentState;
 
@@ -20,6 +21,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sprintSpeed = 15f;
     [SerializeField] private float jumpForce = 10f;
 
+
+    [Header("Debugger Options")]
+    [SerializeField] private bool debugMode = false;
+    [SerializeField] private float jumpDetection_ray = 1f;
 
     private InputManager inputManager;
     private Rigidbody rb;
@@ -38,8 +43,10 @@ public class PlayerController : MonoBehaviour
     {
         InputHandler(); // Deal with the input
         StateHandler(); // First check state to make sure that player is not frozen
-    }
 
+        CreateRaycast(transform.position, -Vector3.up, jumpDetection_ray);
+        Debugging();
+    }
 
     private void FixedUpdate()
     {
@@ -47,6 +54,7 @@ public class PlayerController : MonoBehaviour
             return;
 
         PlayerMovement();
+        PlayerJump();
     }
 
     private void PlayerMovement()
@@ -59,7 +67,23 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerJump()
     {
+        if (isJumping && isGrounded)
+        {
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+            isJumping = false;
+            isGrounded = false;
+        }
+    }
 
+    private void CreateRaycast(Vector3 position, Vector3 direction, float distance)
+    {
+        RaycastHit hit;
+        Ray ray = new Ray(position, direction);
+
+        if (Physics.Raycast(transform.position, -Vector3.up, out hit, distance) && !isGrounded)
+        {
+            isGrounded = true;
+        }
     }
 
     private void StateHandler()
@@ -104,7 +128,7 @@ public class PlayerController : MonoBehaviour
                     break;
 
                 case InputAction.Jump:
-                    if (inputManager.GetAction(action) && !isJumping)
+                    if (inputManager.GetAction(action) && !isJumping && isGrounded)
                     {
                         isJumping = true;
                     }
@@ -113,6 +137,14 @@ public class PlayerController : MonoBehaviour
         }
 
         currentState = isFrozen ? PlayerState.Frozen : (isSprinting ? PlayerState.Sprinting : (isMoving ? PlayerState.Moving : PlayerState.Idle));
+    }
+
+    private void Debugging()
+    {
+        if (debugMode)
+        {
+            Debug.DrawRay(transform.position, -Vector3.up, Color.red);
+        }
     }
 }
 
