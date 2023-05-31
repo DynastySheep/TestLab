@@ -36,11 +36,12 @@ namespace MoonLib.PlayerInput
             float mouseY = Input.GetAxis("Mouse Y");
 
             Dictionary<InputAction, bool> actions = new Dictionary<InputAction, bool>();
-            //actions[InputAction.Jump] = Input.GetButtonDown("Jump");
+            actions[InputAction.Jump] = Input.GetButtonDown("Jump");
             //actions[InputAction.Crouch] = Input.GetButtonDown("Crouch");
-            //actions[InputAction.Prone] = Input.GetButtonDown("Prone");
             //actions[InputAction.Run] = Input.GetButton("Run");
-            //actions[InputAction.Shoot] = Input.GetButtonDown("Shoot");
+
+            //Test Actions - TEMPORARY
+            actions[InputAction.Freeze] = Input.GetKeyDown(KeyCode.F);
 
             return new InputManager(horizontalInput, verticalInput, mouseX, mouseY, actions);
         }
@@ -52,6 +53,6 @@ namespace MoonLib.PlayerInput
         Crouch,
         Prone,
         Run,
-        Shoot
+        Freeze
     }
 }
